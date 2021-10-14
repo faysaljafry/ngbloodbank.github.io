@@ -23,4 +23,15 @@ export class DatabaseService {
       this.httpOptions
     );
   }
+  public signIn(data: any) {
+    let toSend = {
+      email: data.userEmail,
+      password: data.password,
+    };
+    return this.httpClient.post(
+      'http://127.0.0.1:8000/api/login',
+      toSend,
+      this.httpOptions
+    );
+  }
 }

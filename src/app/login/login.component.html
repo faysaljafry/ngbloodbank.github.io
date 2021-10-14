@@ -1,0 +1,67 @@
+<div class="container">
+  <h1 class="text-danger text-center">CUBE Blood Bank</h1>
+  <h2 class="text-danger text-center">Please Sign In to Continue</h2>
+  <form #signInForm="ngForm" (ngSubmit)="signIn(signInForm)">
+    <div id="userData">
+      <div class="form-group">
+        <div>
+          <div class="row px-5 mt-3">
+            <label class="col-4 text-right" for="userEmail">Email:</label>
+            <div class="col-6">
+              <input
+                ngModel
+                email
+                name="userEmail"
+                type="text"
+                id="userEmail"
+                #userEmail="ngModel"
+                class="form-control"
+                required
+              />
+              <div
+                class="text-danger"
+                *ngIf="userEmail.touched && userEmail.invalid"
+              >
+                <small>* Please Enter a Valid and unused email</small>
+              </div>
+            </div>
+          </div>
+          <div class="row px-5 mt-3">
+            <label class="col-4 text-right" for="Password">Password:</label>
+            <div class="col-6">
+              <input
+                ngModel
+                type="password"
+                name="password"
+                #password="ngModel"
+                id="password"
+                required
+                class="form-control"
+              />
+              <div
+                *ngIf="password.invalid && password.touched"
+                class="text-danger"
+              >
+                <small>* Password Can not be Empty</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-right">
+        <button
+          [disabled]="signInForm.invalid"
+          type="submit"
+          class="btn btn-primary text-right"
+        >
+          Sign In
+        </button>
+      </div>
+      <!-- <div class="not-valid-status" *ngIf="!loggedIn">
+        <small class="text-danger"
+          >* The data you entered is invalid, Please try again.</small
+        >
+      </div> -->
+    </div>
+  </form>
+</div>
