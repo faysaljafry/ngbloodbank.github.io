@@ -1,14 +1,17 @@
 <body>
-  <div class="p-3 text-right">
+  <div class="p-3 text-right" *ngIf="!this.databaseService.loggedIn">
     <button
       role="presentation"
       [routerLink]="['login']"
       class="btn btn-primary"
       type="button"
-      data-toggle="modal"
-      data-target="#signinModal"
     >
       Admin Sign In
+    </button>
+  </div>
+  <div class="p-3 text-right" *ngIf="this.databaseService.loggedIn">
+    <button class="btn btn-primary" type="button" (click)="signOut()">
+      Admin Sign Out
     </button>
   </div>
   <h1 class="text-danger text-center">CUBE Blood Bank</h1>

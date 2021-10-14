@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { CompileShallowModuleMetadata, ConstantPool } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DatabaseService } from '../database.service';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-bbank',
@@ -22,7 +24,9 @@ export class BBankComponent implements OnInit {
   selectedQuantity = '10';
   ProfileData: any = {};
 
-  constructor(private databaseService: DatabaseService) {}
+  constructor(
+    public databaseService: DatabaseService //public login: LoginComponent
+  ) {}
 
   ngOnInit(): void {
     this.databaseService.getAllRecords().subscribe((data: any) => {
@@ -55,5 +59,13 @@ export class BBankComponent implements OnInit {
         this.currentRecord.push(form.value);
         this.EmailOccupied = {};
       });
+  }
+  signOut() {
+    console.log('In sign out Function');
+    alert('Are you sure, that you want to Log Out?');
+    this.databaseService.signOut2().subscribe((response) => {
+      this.databaseService.loggedIn = !response;
+      console.log(!response);
+    });
   }
 }

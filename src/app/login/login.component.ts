@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DatabaseService } from '../database.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-login',
@@ -8,17 +10,20 @@ import { DatabaseService } from '../database.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  constructor(private database: DatabaseService) {}
-  loggedIn: any;
+  constructor(public database: DatabaseService, private router: Router) {}
+
   ngOnInit(): void {}
 
   signIn(form: NgForm) {
     console.log('Ready To Go for a Sign In check Up');
     this.database.signIn(form.value).subscribe((response) => {
       console.log(response);
-      this.loggedIn = response.body;
-      if (!this.loggedIn)
-        form.form.controls['userEmail'].setErrors({ invalid: true });
+      this.database.loggedIn = response.body;
+
+      if (this.database.loggedIn) {
+        //form.form.controls['userEmail'].setErrors({ invalid: true });
+        this.router.navigate(['']);
+      }
     });
     // if (!this.loggedIn) {
     //   console.log(this.loggedIn);
@@ -26,4 +31,9 @@ export class LoginComponent implements OnInit {
     // }
     //console.log(!this.loggedIn);
   }
+  // public logOut() {
+  //   this.database.signOut().subscribe((response) => {
+  //     this.database.loggedIn = response;
+  //   });
+  // }
 }
