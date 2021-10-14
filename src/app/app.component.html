@@ -28,22 +28,22 @@
                 <div class="form-group">
                   <div>
                     <div class="row mt-3">
-                      <label class="col-4" for="username">Name</label>
+                      <label class="col-4" for="name">Name</label>
 
                       <div class="col-8">
                         <input
                           class="col-6"
                           ngModel
-                          name="username"
-                          #username="ngModel"
+                          name="name"
+                          #name="ngModel"
                           type="text"
-                          id="username"
+                          id="name"
                           class="form-control"
                           required
-                          pattern="[a-zA-Z]+[ ]*[a-zA-Z]+"
+                          pattern="[a-zA-Z]+[ ]*[a-zA-Z]*"
                         />
                         <div
-                          *ngIf="username.invalid && username.touched"
+                          *ngIf="name.invalid && name.touched"
                           class="text-danger"
                         >
                           <small>* Name Can't be Empty</small>
@@ -70,8 +70,13 @@
                         class="text-danger"
                         *ngIf="email.touched && email.invalid"
                       >
-                        <small>* Please enter a valid email</small>
+                        <small>* Please Enter a Valid and unused email</small>
                       </div>
+                      <!-- <div *ngIf="EmailOccupied">
+                        <small class="text-danger"
+                          >This Email has already been taken!</small
+                        >
+                      </div> -->
                     </div>
                   </div>
                   <!--Blood Group-->
@@ -123,7 +128,7 @@
                     <div class="col-8">
                       <select
                         ngModel
-                        name="bg"
+                        name="bloodGroup"
                         id="bloodgroup"
                         class="form-control"
                         #bg="ngModel"
@@ -166,11 +171,12 @@
         <th scope="col">Blood Group</th>
         <th scope="col">Contact #</th>
         <th scope="col">Email</th>
+        <th scope="col">Actions</th>
       </thead>
       <tr *ngFor="let record of currentRecord; let i = index">
-        <td class="text-light">{{ record.username }}</td>
+        <td class="text-light">{{ record.name }}</td>
         <td class="text-light">{{ record.city }}</td>
-        <td class="text-light">{{ record.bg }}</td>
+        <td class="text-light">{{ record.bloodGroup }}</td>
         <td>
           <a
             class="text-light"
@@ -184,6 +190,9 @@
           <a class="text-light" href="mailto:{{ record.email }}">{{
             record.email
           }}</a>
+        </td>
+        <td *ngIf="!isLoggedIn">
+          <button class="btn btn-danger">Edit</button>
         </td>
       </tr>
     </table>
