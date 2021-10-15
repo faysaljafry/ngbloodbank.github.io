@@ -10,9 +10,12 @@ import { ThrowStmt } from '@angular/compiler';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  user = '1';
   constructor(public database: DatabaseService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    localStorage.setItem('sessionUser', this.user);
+  }
 
   signIn(form: NgForm) {
     console.log('Ready To Go for a Sign In check Up');

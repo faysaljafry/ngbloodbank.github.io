@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { Observable, ObservableInput, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,13 @@ export class DatabaseService {
   constructor(private httpClient: HttpClient) {}
   loggedIn: any;
   loggedOut: any = false;
+
+  httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+  };
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -23,6 +30,13 @@ export class DatabaseService {
     return this.httpClient.post(
       'http://127.0.0.1:8000/api/addProfile',
       data,
+      this.httpOptions
+    );
+  }
+  public editRecord(record: any) {
+    return this.httpClient.post(
+      'http://127.0.0.1:8000/api/editRecord',
+      record,
       this.httpOptions
     );
   }
@@ -53,6 +67,21 @@ export class DatabaseService {
     }
     return response;
   }
+
+  sendmail(email: any) {
+    return this.httpClient.post(
+      'http://127.0.0.1:8000/api/sendmail',
+      email,
+      this.httpOptions
+    );
+  }
+
+  delete(id: number) {
+    return this.httpClient
+      .delete('http://127.0.0.1:8000/api/delete/' + id, this.httpHeader)
+      .pipe(retry(1), catchError(this.httpError));
+  }
+
   httpError(error: any) {
     return throwError(error);
   }

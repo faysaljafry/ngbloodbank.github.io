@@ -1,11 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { CompileShallowModuleMetadata, ConstantPool } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DatabaseService } from '../database.service';
-import { LoginComponent } from '../login/login.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-bbank',
@@ -13,6 +12,16 @@ import { LoginComponent } from '../login/login.component';
   styleUrls: ['./bbank.component.css'],
 })
 export class BBankComponent implements OnInit {
+  //Some test code from motherfucker
+  editableObject = {
+    id: -1,
+    name: '',
+    city: '',
+    bloodGroup: '',
+    contact: '',
+    email: '',
+  };
+  addNew = true;
   isLoggedIn = true;
   EmailOccupied!: any;
   errorFlag = false;
@@ -25,7 +34,8 @@ export class BBankComponent implements OnInit {
   ProfileData: any = {};
 
   constructor(
-    public databaseService: DatabaseService //public login: LoginComponent
+    public databaseService: DatabaseService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -67,5 +77,47 @@ export class BBankComponent implements OnInit {
       this.databaseService.loggedIn = !response;
       console.log(!response);
     });
+  }
+  editRecord(record: any) {
+    this.addNew = false;
+    this.editableObject = record;
+    console.log('The index of the record to edit is :', this.editableObject);
+  }
+
+  updateExisting() {
+    console.log('New record to add:', this.editableObject);
+    let toChange = this.editableObject;
+    this.editableObject = {
+      id: -1,
+      name: '',
+      city: '',
+      bloodGroup: '',
+      contact: '',
+      email: '',
+    };
+    this.databaseService
+      .editRecord(toChange)
+      .subscribe((response) =>
+        console.log('The response returned from the Backend', response)
+      );
+    this.addNew = true;
+  }
+
+  deleteProfile(id: number) {
+    if (!confirm('Are you sure you want to del this item?')) return;
+    this.databaseService.delete(id).subscribe((res) => {
+      console.log(res);
+      this.databaseService.getAllRecords().subscribe((data: any) => {
+        console.log(data);
+        this.currentRecord = data;
+      });
+    });
+    this.toastr.success('User Record Deleted Successfully !');
+  }
+
+  sendEmail(email: any) {
+    this.databaseService
+      .sendmail(email)
+      .subscribe((response) => console.log(response.body));
   }
 }
