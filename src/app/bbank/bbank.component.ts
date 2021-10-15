@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./bbank.component.css'],
 })
 export class BBankComponent implements OnInit {
-  //Some test code from motherfucker
   editableObject = {
     id: -1,
     name: '',
